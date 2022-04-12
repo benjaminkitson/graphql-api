@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.17.6",
-    "@babel/preset-env": "^7.16.11"
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
+    "@graphql-yoga/node": "^2.1.0"
   }
 }
