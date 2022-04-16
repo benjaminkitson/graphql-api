@@ -2,6 +2,10 @@ import { createServer } from '@graphql-yoga/node';
 
 const typeDefs = `
   type Query {
+    me: User!
+  }
+
+  type User {
     name: String!
     id: ID!
     age: Int!
@@ -12,29 +16,25 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    name() {
-      return 'Ben'
-    },
-    id() {
-      return '96024'
-    },
-    age() {
-      return 27
-    },
-    employed() {
-      return false
-    },
-    favouriteNumber() {
-      return 3.141
-    },
+    me() {
+      return {
+        name: 'Ben',
+        id: '96024',
+        age: 26,
+        employed: true,
+        favouriteNumber: 3.141
+      };
+    }
   }
 };
 
-const server = new createServer({
-  typeDefs,
-  resolvers
+const server = createServer({
+  schema: {
+    typeDefs,
+    resolvers
+  }
 });
 
 server.start(() => {
   console.log('Hello from the server')
-})
+});
