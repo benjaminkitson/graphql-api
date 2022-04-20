@@ -1,50 +1,5 @@
 import { createServer } from '@graphql-yoga/node';
-
-const posts = [{
-  id: 1,
-  title: 'First post!',
-  body: 'Sweet content',
-  author: 1
-},{
-  id: 2,
-  title: 'Second post?',
-  body: 'More cool content',
-  author: 1
-},{
-  id: 3,
-  title: 'Third post.',
-  body: 'Anything after the second post is meh',
-  author: 2
-}]
-
-const users = [{
-  name: "Ben",
-  id: 1
-},{
-  name: "Bob",
-  id: 2
-},{
-  name: "Bill",
-  id: 3
-}]
-
-const comments = [{
-  post: 1,
-  author: 2,
-  body: "Shitpost ftw",
-  id: 1
-}, {
-  post: 1,
-  author: 1,
-  body: "Go away trollolol",
-  id: 2
-}, {
-  post: 3,
-  author: 1,
-  body: "lol wat",
-  id: 3
-}]
-
+import { posts, users, comments } from './data';
 
 const typeDefs = `
   type Query {
@@ -129,8 +84,8 @@ const resolvers = {
     },
 
     comments(parent, args, ctx, info) {
-      return comments.find((comment) => {
-        return comment.post === parent.comments
+      return comments.filter((comment) => {
+        return comment.author === parent.id
       })
     }
   },
@@ -149,7 +104,6 @@ const resolvers = {
     }
   }
 };
-
 
 const server = createServer({
   schema: {
