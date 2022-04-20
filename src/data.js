@@ -17,12 +17,15 @@ const posts = [{
 
 const users = [{
   name: "Ben",
+  username: "benboi",
   id: 1
 }, {
   name: "Bob",
+  username: "bobbo",
   id: 2
 }, {
   name: "Bill",
+  username: "billbaggins",
   id: 3
 }]
 
