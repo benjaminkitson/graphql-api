@@ -1,4 +1,4 @@
-import { createServer } from '@graphql-yoga/node';
+import { createServer, GraphQLYogaError } from '@graphql-yoga/node';
 import { posts, users, comments } from './data';
 
 // createPost(title: String!, body: String!, author: User!)
@@ -66,7 +66,7 @@ const resolvers = {
       const isTaken = users.some(user => user.username === args.username);
 
       if (isTaken) {
-        throw new Error("Username is taken!")
+        throw new GraphQLYogaError("Username is taken!")
       }
 
       const newUser = {
