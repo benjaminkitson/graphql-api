@@ -14,6 +14,7 @@ type Query {
 type Mutation {
   createUser(name: String!, username: String!): [User!]!
   createPost(title: String!, body: String!, author: ID!): [Post!]!
+  createComment(body: String!, post: ID!, author: ID!): [Post!]!
 }
 
 type User {
@@ -103,6 +104,28 @@ const resolvers = {
       posts.push(newPost);
 
       return posts;
+    },
+
+    createComment(parent, args, ctx, info) {
+      const userExists = users.some(user => user.id === args.author);
+      const postExists = posts.some(post => post.id === args.post);
+
+      if (!userExists) {
+        throw new GraphQLYogaError("No user found!")
+      } else if (!postExists) {
+        throw new GraphQLYogaError("Post does not exist")
+      }
+
+      const newComment = {
+        id: comments.length + 1,
+        body: args.body,
+        post: args.post,
+        author: args.author
+      };
+
+      comments.push(newComment);
+
+      return comments;
     }
   },
 
