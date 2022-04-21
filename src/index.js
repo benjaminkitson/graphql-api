@@ -1,44 +1,43 @@
 import { createServer, GraphQLYogaError } from '@graphql-yoga/node';
 import { posts, users, comments } from './data';
 
-// createPost(title: String!, body: String!, author: User!)
-
 const typeDefs = `
-  type Query {
-    post: Post!
-    user: User!
-    posts(query: String!): [Post!]!
-    users: [User!]!
-    comments: [Comment!]!
-    comment: Comment!
-  }
+type Query {
+  post: Post!
+  user: User!
+  posts(query: String!): [Post!]!
+  users: [User!]!
+  comments: [Comment!]!
+  comment: Comment!
+}
 
-  type Mutation {
-    createUser(name: String!, username: String!): [User!]!
-  }
+type Mutation {
+  createUser(name: String!, username: String!): [User!]!
+  createPost(title: String!, body: String!, author: ID!): [Post!]!
+}
 
-  type User {
-    name: String!
-    username: String!
-    id: ID!
-    posts: [Post!]!
-    comments: [Comment!]!
-  }
+type User {
+  name: String!
+  username: String!
+  id: ID!
+  posts: [Post!]!
+  comments: [Comment!]!
+}
 
-  type Post {
-    id: ID!
-    title: String!
-    body: String!
-    author: User!
-    comments: [Comment!]!
-  }
+type Post {
+  id: ID!
+  title: String!
+  body: String!
+  author: User!
+  comments: [Comment!]!
+}
 
-  type Comment {
-    id: ID!
-    body: String!
-    author: User!
-    post: Post!
-  }
+type Comment {
+  id: ID!
+  body: String!
+  author: User!
+  post: Post!
+}
 `;
 
 const resolvers = {
@@ -78,6 +77,32 @@ const resolvers = {
       users.push(newUser);
 
       return users;
+    },
+
+    createPost(parent, args, ctx, info) {
+
+      const userExists = users.some(user => user.id === args.author);
+
+      console.log(userExists)
+
+      console.log(args.author)
+      console.log(users[1].id)
+
+
+      if (!userExists) {
+        throw new GraphQLYogaError("No user found!")
+      }
+
+      const newPost = {
+        id: posts.length + 1,
+        title: args.title,
+        body: args.body,
+        author: args.author
+      };
+
+      posts.push(newPost);
+
+      return posts;
     }
   },
 
